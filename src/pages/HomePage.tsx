@@ -2,6 +2,7 @@ import React from 'react';
 import { HeroBanner } from '../components/home/HeroBanner';
 import { ValueProps } from '../components/home/ValueProps';
 import { CategoryGrid } from '../components/home/CategoryGrid';
+import { ZenniaMuseSection } from '../components/home/ZenniaMuseSection';
 import { FeaturedProducts } from '../components/home/FeaturedProducts';
 import { SpecialOfferBanner } from '../components/home/SpecialOfferBanner';
 import { TestimonialsSection } from '../components/home/TestimonialsSection';
@@ -13,6 +14,7 @@ export const HomePage: React.FC = () => {
       <HeroBanner />
       <ValueProps />
       <CategoryGrid />
+      <ZenniaMuseSection />
       <FeaturedProducts />
       <SpecialOfferBanner />
       <TestimonialsSection />

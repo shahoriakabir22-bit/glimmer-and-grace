@@ -349,6 +349,44 @@ export const SAMPLE_PRODUCTS: Product[] = [
     reviewCount: 56,
     tags: ['jewellery', 'bangles', 'bridal', 'jadau', 'traditional'],
     createdAt: '2026-02-22T16:00:00Z'
+  },
+  {
+    id: 'prod-zennia-01',
+    name: 'The Zennia Royal Emerald & 22K Gold Choker',
+    slug: 'the-zennia-royal-emerald-gold-choker',
+    tagline: 'Signature Muse Collection • Inspired by Timeless Love',
+    description: 'An exclusive masterpiece dedicated to our royal muse Zennia. Handcrafted with certified Colombian emeralds, luminous freshwater pearls, and genuine 22K champagne gold plating with delicate filigree artistry.',
+    materials: 'Hypoallergenic Silver Alloy, 22K Champagne Micro Gold Plating, Colombian Emerald & Natural Cultured Pearls.',
+    category: 'jewellery',
+    subcategory: 'necklaces',
+    price: 4950,
+    originalPrice: 6500,
+    images: [
+      '/images/zennia.png',
+      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=800&q=80'
+    ],
+    thumbnail: '/images/zennia.png',
+    sku: 'GG-ZENNIA-001',
+    stock: 5,
+    isActive: true,
+    isBestSeller: true,
+    isNewArrival: true,
+    isSpecialOffer: true,
+    rating: 5.0,
+    reviewCount: 42,
+    tags: ['jewellery', 'zennia', 'signature', 'bridal', 'necklace', 'choker', 'gold'],
+    createdAt: '2026-03-01T12:00:00Z',
+    reviews: [
+      {
+        id: 'rev-zen-01',
+        userName: 'Yeasin Arafat',
+        rating: 5,
+        comment: 'Dedicated with infinite love and pride to Zennia. Crafted with the utmost grace and perfection.',
+        createdAt: '2026-03-01T12:05:00Z',
+        verifiedPurchase: true
+      }
+    ]
   }
 ];
 
