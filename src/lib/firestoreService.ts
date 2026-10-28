@@ -13,6 +13,7 @@ import {
   Timestamp 
 } from 'firebase/firestore';
 import { db, isFirebaseConfigured } from './firebase';
+import { supabase, isSupabaseConfigured } from './supabase';
 import { Product } from '../types/product';
 import { Order, OrderStatus } from '../types/order';
 import { UserProfile } from '../types/user';
@@ -72,6 +73,42 @@ function setLocalUsers(users: Record<string, UserProfile>): void {
 // ==========================================
 
 export async function fetchProducts(): Promise<Product[]> {
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data, error } = await supabase.from('products').select('*');
+      if (!error && data && data.length > 0) {
+        return data.map(row => ({
+          id: row.id,
+          name: row.name,
+          slug: row.slug,
+          tagline: row.tagline || '',
+          description: row.description || '',
+          ingredients: row.ingredients || '',
+          materials: row.materials || '',
+          howToUse: row.how_to_use || '',
+          category: row.category,
+          subcategory: row.subcategory,
+          price: Number(row.price),
+          originalPrice: row.original_price ? Number(row.original_price) : undefined,
+          images: row.images || [],
+          thumbnail: row.thumbnail,
+          sku: row.sku,
+          stock: row.stock,
+          isActive: row.is_active,
+          isBestSeller: row.is_bestseller,
+          isNewArrival: row.is_new_arrival,
+          isSpecialOffer: row.is_special_offer,
+          rating: Number(row.rating || 5),
+          reviewCount: row.review_count || 0,
+          tags: row.tags || [],
+          createdAt: row.created_at
+        }));
+      }
+    } catch (err) {
+      console.warn('Supabase fetch failed, falling back:', err);
+    }
+  }
+
   if (isFirebaseConfigured && db) {
     try {
       const colRef = collection(db, 'products');
@@ -284,6 +321,33 @@ export async function placeTrustedOrder(params: CreateOrderParams): Promise<{ su
   });
   setLocalProducts(updatedCatalog);
 
+  // If Supabase is active, persist order
+  if (isSupabaseConfigured && supabase) {
+    try {
+      await supabase.from('orders').insert({
+        id: orderId,
+        user_id: params.userId || null,
+        customer_name: params.customerDetails.fullName,
+        customer_phone: params.customerDetails.phone,
+        customer_email: params.customerDetails.email || null,
+        address_details: params.customerDetails,
+        items: newOrder.items,
+        subtotal: newOrder.subtotal,
+        delivery_charge: newOrder.deliveryCharge,
+        discount: newOrder.discount,
+        total: newOrder.total,
+        payment_method: newOrder.paymentMethod,
+        payment_status: newOrder.paymentStatus,
+        order_status: newOrder.orderStatus,
+        notes: newOrder.notes || '',
+        timeline: newOrder.timeline,
+        created_at: timestamp
+      });
+    } catch (err) {
+      console.warn('Supabase order insert warning:', err);
+    }
+  }
+
   // If Firebase is active, persist order and update stock
   if (isFirebaseConfigured && db) {
     try {
@@ -313,6 +377,34 @@ export async function placeTrustedOrder(params: CreateOrderParams): Promise<{ su
 }
 
 export async function fetchAllOrders(): Promise<Order[]> {
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data, error } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
+      if (!error && data && data.length > 0) {
+        return data.map(o => ({
+          id: o.id,
+          orderNumber: o.id,
+          userId: o.user_id,
+          customerDetails: o.address_details,
+          items: o.items,
+          subtotal: Number(o.subtotal),
+          deliveryCharge: Number(o.delivery_charge),
+          discount: Number(o.discount || 0),
+          total: Number(o.total),
+          paymentMethod: o.payment_method,
+          paymentStatus: o.payment_status,
+          orderStatus: o.order_status,
+          notes: o.notes || '',
+          timeline: o.timeline || [],
+          createdAt: o.created_at,
+          updatedAt: o.updated_at || o.created_at
+        }));
+      }
+    } catch (err) {
+      console.warn('Supabase fetch orders failed:', err);
+    }
+  }
+
   if (isFirebaseConfigured && db) {
     try {
       const colRef = collection(db, 'orders');
@@ -346,6 +438,17 @@ export async function fetchUserOrders(userId: string): Promise<Order[]> {
 export async function updateOrderStatus(orderId: string, status: OrderStatus, note?: string): Promise<boolean> {
   const timestamp = new Date().toISOString();
   const description = note || `Order status updated to ${status}.`;
+
+  if (isSupabaseConfigured && supabase) {
+    try {
+      await supabase.from('orders').update({
+        order_status: status,
+        updated_at: timestamp
+      }).eq('id', orderId);
+    } catch (err) {
+      console.warn('Supabase update order status error:', err);
+    }
+  }
 
   if (isFirebaseConfigured && db) {
     try {
