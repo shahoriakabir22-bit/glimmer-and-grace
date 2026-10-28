@@ -189,6 +189,10 @@ export const Footer: React.FC = () => {
           <p>
             © {new Date().getFullYear()} <strong className="text-charcoal font-serif">GLIMMER & Grace</strong>. All rights reserved.
           </p>
+          <p className="flex items-center gap-1 text-xs text-charcoal-light">
+            <span>Developed with pride by</span>
+            <strong className="text-burgundy-600 font-semibold font-serif tracking-wide">Yeasin Arafat</strong>
+          </p>
           <p className="flex items-center gap-1 text-[11px]">
             <span>Crafted with</span>
             <Heart className="w-3.5 h-3.5 text-rose-500 fill-current inline" />
