@@ -19,6 +19,7 @@ import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { useAuth } from '../../context/AuthContext';
 import { useProducts } from '../../context/ProductContext';
+import { useSiteSettings } from '../../context/SiteSettingsContext';
 import { formatBDT } from '../../lib/bdValidation';
 
 export const Navbar: React.FC = () => {
@@ -28,6 +29,7 @@ export const Navbar: React.FC = () => {
   const { wishlistCount } = useWishlist();
   const { currentUser, userProfile, isAdmin, logout } = useAuth();
   const { products } = useProducts();
+  const { settings } = useSiteSettings();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
@@ -98,27 +100,35 @@ export const Navbar: React.FC = () => {
   return (
     <header className="sticky top-0 z-40 w-full bg-ivory-100 shadow-sm transition-all duration-300">
       {/* Top Announcement Bar */}
-      <div className="bg-gradient-luxury text-ivory-200 text-xs py-2 px-4 border-b border-gold-500/30">
-        <div className="max-w-7xl mx-auto flex justify-between items-center tracking-wide">
-          <div className="flex items-center gap-4 text-center sm:text-left mx-auto sm:mx-0">
-            <span className="flex items-center gap-1.5 font-medium">
-              <Truck className="w-3.5 h-3.5 text-gold-400" />
-              <span>Free Delivery in Dhaka over <strong>৳1,500</strong></span>
-            </span>
-            <span className="hidden md:inline text-rose-300">|</span>
-            <span className="hidden md:flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-gold-400" />
-              <span>Use Code <strong className="text-gold-300 font-semibold tracking-wider">GLIMMER10</strong> for 10% Off</span>
-            </span>
-          </div>
-          <div className="hidden lg:flex items-center gap-6 text-[11px] text-ivory-300">
-            <span className="flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-gold-400" /> 100% Authentic Guarantee
-            </span>
-            <span>Helpline: +880 1712 345678</span>
+      {settings.announcementEnabled && (
+        <div className="bg-gradient-luxury text-ivory-200 text-xs py-2 px-4 border-b border-gold-500/30">
+          <div className="max-w-7xl mx-auto flex justify-between items-center tracking-wide">
+            <div className="flex items-center gap-4 text-center sm:text-left mx-auto sm:mx-0">
+              <span className="flex items-center gap-1.5 font-medium">
+                <Truck className="w-3.5 h-3.5 text-gold-400" />
+                <span>{settings.announcementText}</span>
+              </span>
+              {settings.promoCode && (
+                <>
+                  <span className="hidden md:inline text-rose-300">|</span>
+                  <span className="hidden md:flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-gold-400" />
+                    <span>{settings.promoDiscountText || `Use Code ${settings.promoCode} for Discount`}</span>
+                  </span>
+                </>
+              )}
+            </div>
+            <div className="hidden lg:flex items-center gap-6 text-[11px] text-ivory-300">
+              <span className="flex items-center gap-1">
+                <ShieldCheck className="w-3.5 h-3.5 text-gold-400" /> 100% Authentic Guarantee
+              </span>
+              <a href={`tel:${settings.phone.replace(/[^0-9+]/g, '')}`} className="hover:text-gold-300 transition-colors">
+                Helpline: {settings.phone}
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main Navigation Bar */}
       <div className="border-b border-blush-200/80 bg-white/90 backdrop-blur-md">

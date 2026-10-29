@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { useSiteSettings } from '../context/SiteSettingsContext';
 import { BD_DIVISIONS, BDDivision, validateBDPhoneNumber, formatBDT } from '../lib/bdValidation';
 import { placeTrustedOrder } from '../lib/firestoreService';
 
@@ -21,6 +22,7 @@ export const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const { items, clearCart, subtotal, discount, appliedCoupon, selectedDivision, setSelectedDivision } = useCart();
   const { currentUser, userProfile } = useAuth();
+  const { settings } = useSiteSettings();
 
   // Form states
   const [fullName, setFullName] = useState(userProfile?.displayName || '');
@@ -41,9 +43,11 @@ export const CheckoutPage: React.FC = () => {
     setSelectedDivision(newDiv);
   };
 
-  // Recalculate delivery fee based on division
-  const isFreeDelivery = subtotal >= 1500;
-  const currentDeliveryCharge = isFreeDelivery ? 0 : (division === 'Dhaka' ? 70 : 130);
+  // Recalculate delivery fee based on division and dynamic settings
+  const isFreeDelivery = subtotal >= (settings.freeDeliveryThreshold || 1500);
+  const currentDeliveryCharge = isFreeDelivery 
+    ? 0 
+    : (division === 'Dhaka' ? (settings.deliveryInsideDhaka || 70) : (settings.deliveryOutsideDhaka || 130));
   const grandTotal = Math.max(0, subtotal - discount + currentDeliveryCharge);
 
   if (items.length === 0) {

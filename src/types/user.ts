@@ -6,8 +6,9 @@ export interface UserProfile {
   displayName: string;
   phoneNumber?: string;
   photoURL?: string;
-  role: 'admin' | 'customer';
+  role: 'superadmin' | 'admin' | 'customer';
   isAdmin: boolean;
+  isSuperAdmin?: boolean;
   savedAddresses?: DeliveryDetails[];
   createdAt: string;
   updatedAt?: string;

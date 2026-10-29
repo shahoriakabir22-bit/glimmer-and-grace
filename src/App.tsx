@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { SiteSettingsProvider } from './context/SiteSettingsContext';
 import { ProductProvider } from './context/ProductContext';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
@@ -44,60 +45,62 @@ export const App: React.FC = () => {
   return (
     <Router>
       <AuthProvider>
-        <ProductProvider>
-          <CartProvider>
-            <WishlistProvider>
-              <div className="flex flex-col min-h-screen">
-                <ScrollToTop />
-                <Navbar />
-                <CartDrawer />
-                
-                <main className="flex-1">
-                  <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    
-                    {/* Category pages */}
-                    <Route path="/cosmetics" element={<CosmeticsPage />} />
-                    <Route path="/jewellery" element={<JewelleryPage />} />
-                    <Route path="/category/cosmetics" element={<CosmeticsPage />} />
-                    <Route path="/category/jewellery" element={<JewelleryPage />} />
-                    <Route path="/shop" element={<ProductListingPage />} />
-                    <Route path="/product/:slug" element={<ProductDetailPage />} />
+        <SiteSettingsProvider>
+          <ProductProvider>
+            <CartProvider>
+              <WishlistProvider>
+                <div className="flex flex-col min-h-screen">
+                  <ScrollToTop />
+                  <Navbar />
+                  <CartDrawer />
+                  
+                  <main className="flex-1">
+                    <Routes>
+                      <Route path="/" element={<HomePage />} />
+                      
+                      {/* Category pages */}
+                      <Route path="/cosmetics" element={<CosmeticsPage />} />
+                      <Route path="/jewellery" element={<JewelleryPage />} />
+                      <Route path="/category/cosmetics" element={<CosmeticsPage />} />
+                      <Route path="/category/jewellery" element={<JewelleryPage />} />
+                      <Route path="/shop" element={<ProductListingPage />} />
+                      <Route path="/product/:slug" element={<ProductDetailPage />} />
 
-                    {/* Shopping flows */}
-                    <Route path="/cart" element={<CartPage />} />
-                    <Route path="/wishlist" element={<WishlistPage />} />
-                    <Route path="/checkout" element={<CheckoutPage />} />
-                    <Route path="/order-success/:orderId" element={<OrderSuccessPage />} />
+                      {/* Shopping flows */}
+                      <Route path="/cart" element={<CartPage />} />
+                      <Route path="/wishlist" element={<WishlistPage />} />
+                      <Route path="/checkout" element={<CheckoutPage />} />
+                      <Route path="/order-success/:orderId" element={<OrderSuccessPage />} />
 
-                    {/* Customer Auth & Account */}
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/register" element={<LoginPage />} />
-                    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                    <Route path="/account" element={<AccountPage />} />
+                      {/* Customer Auth & Account */}
+                      <Route path="/login" element={<LoginPage />} />
+                      <Route path="/register" element={<LoginPage />} />
+                      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                      <Route path="/account" element={<AccountPage />} />
 
-                    {/* Admin Dashboard */}
-                    <Route path="/admin" element={<AdminDashboardPage />} />
+                      {/* Admin Dashboard */}
+                      <Route path="/admin" element={<AdminDashboardPage />} />
 
-                    {/* Informational & Legal */}
-                    <Route path="/about" element={<AboutPage />} />
-                    <Route path="/contact" element={<ContactPage />} />
-                    <Route path="/faq" element={<FaqPage />} />
-                    <Route path="/shipping" element={<ShippingPolicyPage />} />
-                    <Route path="/returns" element={<ReturnPolicyPage />} />
-                    <Route path="/privacy" element={<PrivacyPolicyPage />} />
-                    <Route path="/terms" element={<TermsPage />} />
+                      {/* Informational & Legal */}
+                      <Route path="/about" element={<AboutPage />} />
+                      <Route path="/contact" element={<ContactPage />} />
+                      <Route path="/faq" element={<FaqPage />} />
+                      <Route path="/shipping" element={<ShippingPolicyPage />} />
+                      <Route path="/returns" element={<ReturnPolicyPage />} />
+                      <Route path="/privacy" element={<PrivacyPolicyPage />} />
+                      <Route path="/terms" element={<TermsPage />} />
 
-                    {/* 404 Fallback */}
-                    <Route path="*" element={<NotFoundPage />} />
-                  </Routes>
-                </main>
+                      {/* 404 Fallback */}
+                      <Route path="*" element={<NotFoundPage />} />
+                    </Routes>
+                  </main>
 
-                <Footer />
-              </div>
-            </WishlistProvider>
-          </CartProvider>
-        </ProductProvider>
+                  <Footer />
+                </div>
+              </WishlistProvider>
+            </CartProvider>
+          </ProductProvider>
+        </SiteSettingsProvider>
       </AuthProvider>
     </Router>
   );

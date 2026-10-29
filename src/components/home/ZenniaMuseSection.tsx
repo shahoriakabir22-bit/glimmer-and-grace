@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, Heart, Crown, ArrowRight, Diamond } from 'lucide-react';
+import { useSiteSettings } from '../../context/SiteSettingsContext';
 
 export const ZenniaMuseSection: React.FC = () => {
+  const { settings } = useSiteSettings();
+
   return (
     <section className="py-16 md:py-24 bg-gradient-to-b from-white via-blush-100/60 to-ivory-200 border-b border-blush-200 relative overflow-hidden">
       {/* Decorative ambient lights */}
@@ -23,11 +26,10 @@ export const ZenniaMuseSection: React.FC = () => {
                 {/* Gold glowing frame */}
                 <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white ring-4 ring-gold-400/70 aspect-[4/5] bg-blush-100 group">
                   <img
-                    src="/images/zennia.png"
+                    src={settings.zenniaImageUrl || "/images/zennia.png"}
                     alt="Zennia — The Muse of Glimmer & Grace"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                     onError={(e) => {
-                      // Fallback to high-end bridal portrait if file is being generated
                       (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800&q=80';
                     }}
                   />
@@ -65,28 +67,28 @@ export const ZenniaMuseSection: React.FC = () => {
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blush-200/80 border border-gold-400/50 shadow-xs">
                 <Sparkles className="w-4 h-4 text-gold-600" />
                 <span className="text-xs font-bold uppercase tracking-[0.2em] text-burgundy-600">
-                  Bespoke Signature Tribute
+                  {settings.zenniaBadge || 'Bespoke Signature Tribute'}
                 </span>
               </div>
 
               <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-burgundy-500 leading-tight">
-                The Zennia Collection <br />
+                {settings.zenniaTitle} <br />
                 <span className="font-light italic text-rose-dark text-2xl sm:text-3xl lg:text-4xl">
-                  Grace, Romance & Eternal Glow
+                  {settings.zenniaSubtitle}
                 </span>
               </h2>
 
               <p className="text-sm sm:text-base text-charcoal/85 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                Created in honor of <strong>Zennia</strong>, whose ethereal grace, warmth, and natural beauty inspire every hand-selected jewel and velvet shade at GLIMMER & Grace. A celebration of love that shines brighter than the finest diamonds.
+                {settings.zenniaDescription}
               </p>
 
               {/* Romantic quote pill */}
               <div className="p-4 rounded-2xl bg-gradient-to-r from-blush-50 via-white to-blush-50 border border-blush-300/80 shadow-xs max-w-xl mx-auto lg:mx-0 text-left">
                 <p className="text-xs sm:text-sm font-serif italic text-burgundy-600 leading-snug">
-                  "In your smile, true beauty finds its meaning; in your grace, every gem finds its sparkle."
+                  {settings.zenniaQuote}
                 </p>
                 <p className="text-[10px] text-charcoal-muted uppercase font-semibold tracking-wider mt-1.5 text-right">
-                  — Dedicated with pure devotion by Yeasin Arafat
+                  — {settings.zenniaDedicatedBy}
                 </p>
               </div>
 
@@ -94,18 +96,18 @@ export const ZenniaMuseSection: React.FC = () => {
               <div className="grid grid-cols-3 gap-3 sm:gap-4 max-w-lg mx-auto lg:mx-0 pt-2 text-center lg:text-left">
                 <div className="p-3 bg-blush-50 rounded-2xl border border-blush-200">
                   <Diamond className="w-4 h-4 text-gold-600 mx-auto lg:mx-0 mb-1" />
-                  <p className="font-serif font-bold text-xs text-charcoal">Pure Elegance</p>
-                  <p className="text-[10px] text-charcoal-muted">Handcrafted luxury</p>
+                  <p className="font-serif font-bold text-xs text-charcoal">{settings.zenniaPillar1Title}</p>
+                  <p className="text-[10px] text-charcoal-muted">{settings.zenniaPillar1Desc}</p>
                 </div>
                 <div className="p-3 bg-blush-50 rounded-2xl border border-blush-200">
                   <Crown className="w-4 h-4 text-gold-600 mx-auto lg:mx-0 mb-1" />
-                  <p className="font-serif font-bold text-xs text-charcoal">Queen’s Radiance</p>
-                  <p className="text-[10px] text-charcoal-muted">Rose & 22K gold</p>
+                  <p className="font-serif font-bold text-xs text-charcoal">{settings.zenniaPillar2Title}</p>
+                  <p className="text-[10px] text-charcoal-muted">{settings.zenniaPillar2Desc}</p>
                 </div>
                 <div className="p-3 bg-blush-50 rounded-2xl border border-blush-200">
                   <Heart className="w-4 h-4 text-rose-500 mx-auto lg:mx-0 mb-1 fill-current" />
-                  <p className="font-serif font-bold text-xs text-charcoal">Eternal Love</p>
-                  <p className="text-[10px] text-charcoal-muted">Timeless memories</p>
+                  <p className="font-serif font-bold text-xs text-charcoal">{settings.zenniaPillar3Title}</p>
+                  <p className="text-[10px] text-charcoal-muted">{settings.zenniaPillar3Desc}</p>
                 </div>
               </div>
 

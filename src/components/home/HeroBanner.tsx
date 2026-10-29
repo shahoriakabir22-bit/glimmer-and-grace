@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, Diamond } from 'lucide-react';
+import { useSiteSettings } from '../../context/SiteSettingsContext';
 
 export const HeroBanner: React.FC = () => {
+  const { settings } = useSiteSettings();
+
   return (
     <section className="relative overflow-hidden bg-gradient-blush py-12 md:py-20 lg:py-24 border-b border-blush-200">
       {/* Subtle decorative circles */}
@@ -19,37 +22,37 @@ export const HeroBanner: React.FC = () => {
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-gold-400/40 shadow-xs">
               <Sparkles className="w-4 h-4 text-gold-500" />
               <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-burgundy-600">
-                DISCOVER YOUR NATURAL BEAUTY
+                {settings.heroBadge || 'DISCOVER YOUR NATURAL BEAUTY'}
               </span>
             </div>
 
             {/* Serif Main Heading */}
             <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-charcoal tracking-tight leading-[1.15]">
-              Premium Cosmetics <br />
+              {settings.heroTitleLine1} <br />
               <span className="font-light italic text-rose-dark">&</span>{' '}
-              <span className="text-gradient-burgundy">Exquisite Jewellery</span>
+              <span className="text-gradient-burgundy">{settings.heroTitleLine2}</span>
             </h1>
 
             {/* Subheading */}
             <p className="text-base sm:text-lg text-charcoal-light font-normal max-w-xl mx-auto lg:mx-0">
-              Feel beautiful. Look elegant. Be you. Indulge in certified skincare, velvet lip shades, and regal 22K gold & pearl jewellery crafted for every moment.
+              {settings.heroSubtitle}
             </p>
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
               <Link
-                to="/cosmetics"
+                to={settings.heroPrimaryCtaLink || '/cosmetics'}
                 className="w-full sm:w-auto px-8 py-4 bg-gradient-luxury hover:opacity-95 text-white font-semibold rounded-full text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-luxury hover:shadow-luxury-hover transition-all group"
               >
-                <span>Shop Cosmetics</span>
+                <span>{settings.heroPrimaryCtaText || 'Shop Cosmetics'}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
-                to="/jewellery"
+                to={settings.heroSecondaryCtaLink || '/jewellery'}
                 className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-gold-50 text-burgundy-600 border border-gold-500/50 font-semibold rounded-full text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-xs"
               >
                 <Diamond className="w-4 h-4 text-gold-600" />
-                <span>Explore Jewellery</span>
+                <span>{settings.heroSecondaryCtaText || 'Explore Jewellery'}</span>
               </Link>
             </div>
 
@@ -78,7 +81,7 @@ export const HeroBanner: React.FC = () => {
               {/* Main Luxury Frame */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white ring-1 ring-gold-400/40 bg-white">
                 <img
-                  src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800&q=80"
+                  src={settings.heroImageUrl || "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800&q=80"}
                   alt="Glimmer and Grace Luxury Model"
                   className="w-full h-[460px] object-cover object-center"
                 />
@@ -90,7 +93,7 @@ export const HeroBanner: React.FC = () => {
                       Limited Bridal Offer
                     </span>
                     <span className="font-serif font-bold text-sm text-burgundy-500">
-                      Up to 30% Off Sets
+                      {settings.heroOfferBadge || 'Up to 30% Off Sets'}
                     </span>
                   </div>
                   <Link

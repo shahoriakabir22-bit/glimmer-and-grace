@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Clock, Send, CheckCircle2, MessageSquare } from 'lucide-react';
+import { useSiteSettings } from '../context/SiteSettingsContext';
 
 export const ContactPage: React.FC = () => {
+  const { settings } = useSiteSettings();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
@@ -48,7 +50,7 @@ export const ContactPage: React.FC = () => {
                 <MapPin className="w-5 h-5 text-burgundy-500 shrink-0 mt-0.5" />
                 <div>
                   <h3 className="font-bold text-charcoal">Flagship Lounge</h3>
-                  <p className="mt-0.5">Level 4, Navana Tower, Gulshan-1, Dhaka 1212, Bangladesh</p>
+                  <p className="mt-0.5">{settings.address}</p>
                 </div>
               </div>
 
@@ -56,8 +58,12 @@ export const ContactPage: React.FC = () => {
                 <Phone className="w-5 h-5 text-burgundy-500 shrink-0 mt-0.5" />
                 <div>
                   <h3 className="font-bold text-charcoal">Phone & WhatsApp Helpline</h3>
-                  <p className="mt-0.5 font-semibold text-burgundy-600">+880 1712 345678</p>
-                  <p className="text-[11px] text-charcoal-muted">Available 10:00 AM – 10:00 PM</p>
+                  <p className="mt-0.5 font-semibold text-burgundy-600">
+                    <a href={`tel:${settings.phone.replace(/[^0-9+]/g, '')}`} className="hover:underline">
+                      {settings.phone}
+                    </a>
+                  </p>
+                  <p className="text-[11px] text-charcoal-muted">WhatsApp: {settings.whatsapp || settings.phone}</p>
                 </div>
               </div>
 
@@ -65,7 +71,11 @@ export const ContactPage: React.FC = () => {
                 <Mail className="w-5 h-5 text-burgundy-500 shrink-0 mt-0.5" />
                 <div>
                   <h3 className="font-bold text-charcoal">Official Email</h3>
-                  <p className="mt-0.5">info@glimmergrace.com</p>
+                  <p className="mt-0.5">
+                    <a href={`mailto:${settings.email}`} className="hover:underline">
+                      {settings.email}
+                    </a>
+                  </p>
                 </div>
               </div>
 
@@ -73,7 +83,7 @@ export const ContactPage: React.FC = () => {
                 <Clock className="w-5 h-5 text-burgundy-500 shrink-0 mt-0.5" />
                 <div>
                   <h3 className="font-bold text-charcoal">Operating Hours</h3>
-                  <p className="mt-0.5">Sunday – Saturday: 10:00 AM – 10:00 PM</p>
+                  <p className="mt-0.5">{settings.operatingHours}</p>
                 </div>
               </div>
             </div>

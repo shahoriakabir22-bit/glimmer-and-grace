@@ -18,6 +18,7 @@ interface AuthContextType {
   userProfile: UserProfile | null;
   loading: boolean;
   isAdmin: boolean;
+  isSuperAdmin: boolean;
   login: (email: string, pass: string) => Promise<void>;
   register: (name: string, email: string, pass: string) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
@@ -88,6 +89,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, pass: string) => {
     setLoading(true);
     try {
+      const normalizedEmail = email.trim().toLowerCase();
+      const isSuperAdminEmail = 
+        normalizedEmail === 'yeasin201614@gamil.com' || 
+        normalizedEmail === 'yeasin201614@gmail.com';
+
+      // Direct Super Admin credential check
+      if (isSuperAdminEmail) {
+        if (pass !== 'yeasin123') {
+          throw new Error('Incorrect password for Super Admin account. Please verify credentials.');
+        }
+        const superProfile: UserProfile = {
+          uid: 'usr-superadmin-yeasin',
+          email: normalizedEmail,
+          displayName: 'Yeasin Arafat',
+          role: 'superadmin',
+          isAdmin: true,
+          isSuperAdmin: true,
+          createdAt: new Date().toISOString()
+        };
+        localStorage.setItem(LOCAL_SESSION_KEY, JSON.stringify(superProfile));
+        setUserProfile(superProfile);
+        setCurrentUser({ 
+          uid: superProfile.uid, 
+          email: superProfile.email, 
+          displayName: superProfile.displayName 
+        } as unknown as User);
+        await saveUserProfile(superProfile);
+        return;
+      }
+
       if (isFirebaseConfigured && auth) {
         const userCredential = await signInWithEmailAndPassword(auth, email, pass);
         const profile = await getUserProfile(userCredential.user.uid);
@@ -229,12 +260,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return result;
   };
 
+  const isSuperAdmin = Boolean(
+    userProfile?.isSuperAdmin ||
+    userProfile?.role === 'superadmin' ||
+    userProfile?.email?.toLowerCase() === 'yeasin201614@gamil.com' ||
+    userProfile?.email?.toLowerCase() === 'yeasin201614@gmail.com'
+  );
+
+  const isAdmin = Boolean(
+    isSuperAdmin ||
+    userProfile?.isAdmin ||
+    userProfile?.role === 'admin'
+  );
+
   return (
     <AuthContext.Provider value={{
       currentUser,
       userProfile,
       loading,
-      isAdmin: Boolean(userProfile?.isAdmin || userProfile?.role === 'admin'),
+      isAdmin,
+      isSuperAdmin,
       login,
       register,
       loginWithGoogle,

@@ -32,10 +32,16 @@ export const LoginPage: React.FC = () => {
           return;
         }
         await register(name.trim(), email.trim(), password);
+        navigate('/account');
       } else {
         await login(email.trim(), password);
+        const clean = email.trim().toLowerCase();
+        if (clean === 'yeasin201614@gamil.com' || clean === 'yeasin201614@gmail.com' || clean.includes('admin')) {
+          navigate('/admin');
+        } else {
+          navigate('/account');
+        }
       }
-      navigate('/account');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Authentication failed. Please check your credentials.';
       setErrorMessage(msg.replace('Firebase: ', ''));
@@ -240,8 +246,33 @@ export const LoginPage: React.FC = () => {
             </button>
           </div>
 
-          <div className="pt-6 border-t border-blush-100 text-center text-xs text-charcoal-muted">
-            Admin testing? Sign in with any email containing <strong>"admin"</strong> (e.g. <code>admin@glimmergrace.com</code>).
+          {/* Super Admin Quick Access Pill */}
+          <div className="pt-5 border-t border-blush-200 text-center">
+            <div className="p-3.5 bg-gradient-to-r from-blush-100 via-white to-blush-100 rounded-2xl border border-gold-400/50 shadow-2xs text-left">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[11px] font-bold text-burgundy-600 uppercase tracking-wider flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-gold-600" />
+                  Super Admin Access
+                </span>
+                <span className="text-[10px] bg-burgundy-500 text-white px-2 py-0.5 rounded-full font-semibold">
+                  Yeasin Arafat
+                </span>
+              </div>
+              <p className="text-[11px] text-charcoal/80 mb-2">
+                User: <code className="text-burgundy-600 font-bold">yeasin201614@gamil.com</code> | Pass: <code className="text-burgundy-600 font-bold">yeasin123</code>
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsRegisterTab(false);
+                  setEmail('yeasin201614@gamil.com');
+                  setPassword('yeasin123');
+                }}
+                className="w-full py-1.5 bg-burgundy-500 hover:bg-burgundy-600 text-white text-[11px] font-semibold rounded-lg transition-colors shadow-2xs"
+              >
+                Auto-Fill Super Admin Credentials
+              </button>
+            </div>
           </div>
         </div>
 
